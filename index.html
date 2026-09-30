@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>TRIVIA GG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#150a26;
+  --bg-1:#1d0f35;
+  --bg-2:#26123f;
+  --card:#241340;
+  --card-2:#2c1750;
+  --text:#f5f1ff;
+  --text-dim:#b6a7d6;
+  --line:#3c2464;
+  --pink:#ff3d77;
+  --orange:#ffb020;
+  --grad: linear-gradient(135deg,var(--pink),var(--orange));
+  --good:#2ecc71;
+  --bad:#ef4444;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius-lg: 26px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --font-display:'Baloo 2', system-ui, sans-serif;
+  --font-body:'Manrope', system-ui, sans-serif;
+
+  --c-historia:#ff8c42;
+  --c-geografia:#22c55e;
+  --c-ciencia:#3b82f6;
+  --c-tecnologia:#a855f7;
+  --c-deportes:#ef4444;
+  --c-cine:#14b8a6;
+  --c-musica:#ec4899;
+  --c-arte:#f59e0b;
+  --c-cultura:#84cc16;
+  --c-entretenimiento:#38bdf8;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg-0:#f4effc; --bg-1:#eee6fb; --bg-2:#e7dbf9;
+    --card:#ffffff; --card-2:#f7f2ff;
+    --text:#241340; --text-dim:#6b5d8c; --line:#e0d3f7;
+    --shadow: 0 10px 30px rgba(80,40,140,.12);
+  }
+}
+:root[data-theme="dark"]{
+  --bg-0:#150a26; --bg-1:#1d0f35; --bg-2:#26123f;
+  --card:#241340; --card-2:#2c1750; --text:#f5f1ff; --text-dim:#b6a7d6; --line:#3c2464;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(255,61,119,.25), transparent 60%),
+    radial-gradient(800px 500px at 110% 10%, rgba(255,176,32,.18), transparent 55%),
+    linear-gradient(160deg,var(--bg-0),var(--bg-1) 45%, var(--bg-2));
+  min-height:100%;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--font-display); margin:0; letter-spacing:.2px;}
+p{margin:0;}
+button{font-family:var(--font-body); cursor:pointer;}
+.app{max-width:920px; margin:0 auto; padding:22px 18px 60px; position:relative;}
+.screen{display:none; animation:fadein .35s ease;}
+.screen.active{display:block;}
+@keyframes fadein{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+@media (prefers-reduced-motion: reduce){ .screen{animation:none;} *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
+
+/* ---------- Reusable ---------- */
+.btn{
+  border:none; border-radius:999px; padding:16px 26px; font-weight:700; font-size:1.02rem;
+  display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+  transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  font-family:var(--font-display);
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--grad); color:#1c0a12; box-shadow:0 10px 24px rgba(255,61,119,.35);}
+.btn-primary:hover{filter:brightness(1.06); box-shadow:0 14px 30px rgba(255,61,119,.45);}
+.btn-outline{background:transparent; color:var(--text); border:2px solid var(--line);}
+.btn-outline:hover{border-color:var(--pink); color:var(--pink);}
+.btn-ghost{background:var(--card); color:var(--text); border:2px solid var(--line);}
+.btn-ghost:hover{border-color:var(--orange);}
+.btn-sm{padding:10px 16px; font-size:.85rem; width:auto;}
+.pill{
+  display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px;
+  font-size:.78rem; font-weight:700; background:var(--card-2); color:var(--text-dim); border:1px solid var(--line);
+}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:22px;}
+
+/* ---------- Home ---------- */
+.home-hero{text-align:center; padding:26px 10px 8px;}
+.logo{
+  font-size:clamp(2.6rem,9vw,4.2rem); font-weight:800; line-height:1;
+  background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+  display:inline-block;
+}
+.logo-sub{margin-top:10px; color:var(--text-dim); font-size:1.05rem; font-weight:600;}
+.menu-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:30px;}
+.menu-card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:20px 16px; text-align:left; display:flex; flex-direction:column; gap:8px;
+  box-shadow:var(--shadow); transition:transform .15s ease, border-color .15s ease;
+}
+.menu-card:hover{transform:translateY(-3px); border-color:var(--pink);}
+.menu-card:active{transform:translateY(0) scale(.98);}
+.menu-card .ic{font-size:1.8rem;}
+.menu-card .ti{font-family:var(--font-display); font-weight:700; font-size:1.08rem;}
+.menu-card .de{color:var(--text-dim); font-size:.82rem; line-height:1.3;}
+.menu-card.primary{grid-column:1 / -1; background:var(--grad); color:#210a15; border:none;}
+.menu-card.primary .de{color:rgba(33,10,21,.75);}
+.menu-card.secondary{grid-column:1 / -1; background:linear-gradient(135deg,#7b2ff7,#38bdf8); color:#0d0a2a; border:none;}
+.menu-card.secondary .de{color:rgba(13,10,42,.75);}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; gap:10px;}
+.back-btn{background:var(--card); border:1px solid var(--line); color:var(--text); border-radius:999px; padding:10px 16px; font-weight:700; display:flex; align-items:center; gap:6px;}
+.back-btn:hover{border-color:var(--pink);}
+.screen-title{font-size:1.4rem; font-weight:800;}
+
+/* ---------- category chips ---------- */
+.chip-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:16px 0;}
+@media(min-width:560px){.chip-grid{grid-template-columns:repeat(3,1fr);}}
+.chip{
+  border-radius:16px; padding:14px 10px; text-align:center; font-weight:700; font-size:.88rem;
+  border:2px solid transparent; background:var(--card-2); color:var(--text); display:flex; flex-direction:column; gap:6px; align-items:center;
+}
+.chip .ic{font-size:1.3rem;}
+.chip.selected{border-color:var(--cat-color, var(--pink)); background:color-mix(in srgb, var(--cat-color, var(--pink)) 18%, var(--card-2));}
+.chip-all{grid-column:1/-1;}
+
+/* ---------- setup form ---------- */
+.field{margin-bottom:16px;}
+.field label{display:block; font-weight:700; font-size:.85rem; color:var(--text-dim); margin-bottom:6px;}
+.field input[type=text]{
+  width:100%; padding:14px 16px; border-radius:14px; border:2px solid var(--line); background:var(--card-2);
+  color:var(--text); font-size:1rem; font-family:var(--font-body); font-weight:600;
+}
+.field input:focus{outline:none; border-color:var(--pink);}
+.seg{display:flex; gap:8px; flex-wrap:wrap;}
+.seg button{flex:1; min-width:70px; padding:12px 8px; border-radius:12px; border:2px solid var(--line); background:var(--card-2); color:var(--text); font-weight:700;}
+.seg button.active{border-color:transparent; background:var(--grad); color:#1c0a12;}
+.toggle-row{display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle{width:52px; height:30px; border-radius:999px; background:var(--line); position:relative; border:none; flex-shrink:0;}
+.toggle.on{background:var(--grad);}
+.toggle::after{content:""; position:absolute; width:24px; height:24px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left .18s ease;}
+.toggle.on::after{left:25px;}
+
+/* ---------- how to play ---------- */
+.step{display:flex; gap:14px; align-items:flex-start; padding:14px 0; border-bottom:1px solid var(--line);}
+.step:last-child{border-bottom:none;}
+.step .num{
+  flex-shrink:0; width:36px; height:36px; border-radius:50%; background:var(--grad); color:#1c0a12;
+  font-family:var(--font-display); font-weight:800; display:flex; align-items:center; justify-content:center;
+}
+.step .tx h4{font-size:1rem; margin-bottom:3px;}
+.step .tx p{color:var(--text-dim); font-size:.88rem; line-height:1.4;}
+
+/* ---------- question bank ---------- */
+.bank-item{border:1px solid var(--line); border-radius:16px; margin-bottom:10px; overflow:hidden; background:var(--card-2);}
+.bank-head{display:flex; align-items:center; gap:10px; padding:14px 16px; cursor:pointer;}
+.bank-head .catdot{width:10px; height:10px; border-radius:50%; background:var(--cat-color); flex-shrink:0;}
+.bank-head .qtxt{font-weight:700; font-size:.92rem; flex:1;}
+.bank-head .car{transition:transform .2s ease; color:var(--text-dim);}
+.bank-item.open .car{transform:rotate(90deg);}
+.bank-body{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+.bank-item.open .bank-body{max-height:320px;}
+.bank-body-in{padding:0 16px 16px;}
+.bank-opt{padding:8px 12px; border-radius:10px; margin-bottom:6px; font-size:.85rem; background:var(--card); border:1px solid var(--line);}
+.bank-opt.correct{border-color:var(--good); background:color-mix(in srgb, var(--good) 15%, var(--card));}
+.bank-expl{font-size:.8rem; color:var(--text-dim); margin-top:8px; line-height:1.4;}
+.filter-row{display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:14px;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fchip{flex-shrink:0; padding:9px 14px; border-radius:999px; border:2px solid var(--line); background:var(--card-2); font-weight:700; font-size:.8rem; color:var(--text-dim);}
+.fchip.active{border-color:transparent; background:var(--grad); color:#1c0a12;}
+
+/* ---------- game screen ---------- */
+.game-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+.game-meta{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.score-badge{background:var(--card); border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-weight:800; font-family:var(--font-display); display:flex; gap:6px; align-items:center;}
+.progressbar-wrap{height:8px; border-radius:99px; background:var(--card-2); overflow:hidden; margin:10px 0 18px;}
+.progressbar-fill{height:100%; background:var(--grad); border-radius:99px; transition:width .3s ease;}
+.timer-wrap{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+.timer-ring{width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-family:var(--font-display); font-size:.95rem; background:var(--card-2); border:3px solid var(--pink); flex-shrink:0;}
+.timer-bar-wrap{flex:1; height:10px; background:var(--card-2); border-radius:99px; overflow:hidden;}
+.timer-bar-fill{height:100%; background:linear-gradient(90deg,var(--good),var(--orange),var(--bad)); width:100%; transform-origin:left; transition:width .1s linear;}
+.qcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow);}
+.qcard .catbadge{display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px; font-weight:800; font-size:.75rem; color:#1c0a12; background:var(--cat-color);}
+.qcard h3{margin-top:14px; font-size:clamp(1.1rem,3.6vw,1.5rem); line-height:1.35;}
+.opts{display:grid; grid-template-columns:1fr; gap:12px; margin-top:20px;}
+@media(min-width:600px){.opts{grid-template-columns:1fr 1fr;}}
+.opt{
+  text-align:left; padding:16px 18px; border-radius:16px; border:2px solid var(--line); background:var(--card-2); color:var(--text);
+  font-weight:700; font-size:.96rem; display:flex; align-items:center; gap:12px; transition:transform .12s ease, border-color .12s ease;
+}
+.opt:hover:not(:disabled){border-color:var(--pink); transform:translateY(-2px);}
+.opt .letter{width:28px; height:28px; border-radius:50%; background:var(--card); border:2px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:.8rem; flex-shrink:0;}
+.opt:disabled{cursor:default;}
+.opt.correct{border-color:var(--good); background:color-mix(in srgb, var(--good) 22%, var(--card-2)); animation:pop .3s ease;}
+.opt.correct .letter{background:var(--good); border-color:var(--good); color:#06210f;}
+.opt.wrong{border-color:var(--bad); background:color-mix(in srgb, var(--bad) 22%, var(--card-2));}
+.opt.wrong .letter{background:var(--bad); border-color:var(--bad); color:#2b0808;}
+.opt.dim{opacity:.5;}
+@keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.03);}100%{transform:scale(1);}}
+.result-flash{margin-top:16px; border-radius:16px; padding:14px 16px; font-weight:800; font-family:var(--font-display); display:none; align-items:center; gap:10px; flex-wrap:wrap;}
+.result-flash.show{display:flex; animation:slideup .25s ease;}
+.result-flash.good{background:color-mix(in srgb, var(--good) 20%, var(--card)); border:1px solid var(--good); color:var(--good);}
+.result-flash.bad{background:color-mix(in srgb, var(--bad) 20%, var(--card)); border:1px solid var(--bad); color:#ff9b9b;}
+.result-explain{margin-top:8px; font-family:var(--font-body); font-weight:500; color:var(--text-dim); font-size:.85rem; width:100%;}
+@keyframes slideup{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+.next-row{display:flex; justify-content:flex-end; margin-top:16px;}
+
+/* ---------- mp turn transition ---------- */
+.turn-card{text-align:center; padding:50px 24px;}
+.turn-card .ic{font-size:3.2rem;}
+.turn-card h2{margin-top:14px; font-size:1.6rem;}
+.turn-card p{color:var(--text-dim); margin-top:8px;}
+
+/* ---------- mp scoreboard ---------- */
+.vs-board{display:flex; align-items:center; gap:12px; margin-bottom:16px;}
+.vs-side{flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; text-align:center;}
+.vs-side .nm{font-weight:700; font-size:.85rem; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.vs-side .sc{font-family:var(--font-display); font-size:1.5rem; font-weight:800; margin-top:2px;}
+.vs-mid{font-family:var(--font-display); font-weight:800; color:var(--text-dim);}
+
+/* ---------- results ---------- */
+.result-hero{text-align:center; padding:20px 10px 4px;}
+.result-hero .emoji{font-size:3.4rem;}
+.result-hero h2{font-size:1.7rem; margin-top:8px;}
+.result-hero p{color:var(--text-dim); margin-top:4px;}
+.stat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:22px 0;}
+@media(min-width:560px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
+.stat-box{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; text-align:center;}
+.stat-box .v{font-family:var(--font-display); font-size:1.5rem; font-weight:800;}
+.stat-box .l{font-size:.72rem; color:var(--text-dim); font-weight:700; margin-top:2px;}
+.mp-compare{display:flex; gap:14px; margin:22px 0;}
+.mp-col{flex:1; background:var(--card); border-radius:16px; padding:18px; text-align:center; border:2px solid var(--line);}
+.mp-col.winner{border-color:var(--orange); background:linear-gradient(160deg, color-mix(in srgb, var(--orange) 15%, var(--card)), var(--card));}
+.mp-col .crown{font-size:1.6rem;}
+.mp-col .name{font-weight:800; font-family:var(--font-display); margin-top:4px;}
+.mp-col .pts{font-size:1.8rem; font-weight:800; font-family:var(--font-display); margin-top:6px; background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.mp-col .sub{color:var(--text-dim); font-size:.78rem; margin-top:6px;}
+.btn-row{display:flex; flex-direction:column; gap:12px; margin-top:10px;}
+
+/* ---------- records ---------- */
+.rec-tabs{display:flex; gap:8px; margin-bottom:16px;}
+.rec-tabs button{flex:1;}
+.rec-table{width:100%; border-collapse:collapse;}
+.rec-table th{text-align:left; font-size:.72rem; color:var(--text-dim); font-weight:700; padding:8px 10px; border-bottom:2px solid var(--line);}
+.rec-table td{padding:10px; border-bottom:1px solid var(--line); font-size:.86rem; font-weight:600;}
+.rec-table tr:last-child td{border-bottom:none;}
+.rank{width:26px; height:26px; border-radius:50%; background:var(--card-2); display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:.75rem;}
+.rank.g1{background:linear-gradient(135deg,#ffd76a,#ffb020); color:#3a2400;}
+.rank.g2{background:linear-gradient(135deg,#e2e2e2,#b7b7b7); color:#2a2a2a;}
+.rank.g3{background:linear-gradient(135deg,#e0a373,#c17a41); color:#301700;}
+.empty-state{text-align:center; padding:40px 12px; color:var(--text-dim);}
+.empty-state .ic{font-size:2.4rem; margin-bottom:10px;}
+
+.footer-note{text-align:center; color:var(--text-dim); font-size:.72rem; margin-top:34px; opacity:.7;}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ============ HOME ============ -->
+  <section class="screen active" id="screen-home">
+    <div class="home-hero">
+      <div class="logo">TRIVIA GG</div>
+      <div class="logo-sub">¿Cuánto sabés?</div>
+    </div>
+    <div class="menu-grid">
+      <button class="menu-card primary" onclick="goSoloSetup()">
+        <span class="ic">🎯</span>
+        <span class="ti">JUGAR SOLO</span>
+        <span class="de">Respondé contra el reloj y superá tu propio récord</span>
+      </button>
+      <button class="menu-card secondary" onclick="goMpSetup()">
+        <span class="ic">⚔️</span>
+        <span class="ti">1 VS 1</span>
+        <span class="de">Retá a un amigo en el mismo dispositivo</span>
+      </button>
+      <button class="menu-card" onclick="showScreen('screen-howto')">
+        <span class="ic">❓</span>
+        <span class="ti">CÓMO JUGAR</span>
+        <span class="de">Las reglas en 30 segundos</span>
+      </button>
+      <button class="menu-card" onclick="openBank()">
+        <span class="ic">📚</span>
+        <span class="ti">BANCO DE PREGUNTAS</span>
+        <span class="de">Explorá todas las preguntas</span>
+      </button>
+      <button class="menu-card" onclick="openRecords()">
+        <span class="ic">🏆</span>
+        <span class="ti">RÉCORDS</span>
+        <span class="de">Los mejores puntajes</span>
+      </button>
+      <button class="menu-card" onclick="openSettings()">
+        <span class="ic">⚙️</span>
+        <span class="ti">CONFIGURACIÓN</span>
+        <span class="de">Sonido, tiempo y dificultad</span>
+      </button>
+    </div>
+    <div class="footer-note">10 categorías · 50 preguntas · hecho para jugar rápido</div>
+  </section>
+
+  <!-- ============ HOW TO PLAY ============ -->
+  <section class="screen" id="screen-howto">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('screen-home')">← Volver</button>
+      <div class="screen-title">Cómo jugar</div>
+      <div style="width:90px"></div>
+    </div>
+    <div class="card">
+      <div class="step"><div class="num">1</div><div class="tx"><h4>Elegí un modo</h4><p>Jugá solo contra el sistema o retá a un amigo en modo 1 vs 1.</p></div></div>
+      <div class="step"><div class="num">2</div><div class="tx"><h4>Elegí una categoría</h4><p>Historia, ciencia, música y más — o mezclá todas con "TODAS".</p></div></div>
+      <div class="step"><div class="num">3</div><div class="tx"><h4>Leé la pregunta</h4><p>Tenés 15 segundos por pregunta. La barra te muestra el tiempo restante.</p></div></div>
+      <div class="step"><div class="num">4</div><div class="tx"><h4>Elegí una respuesta</h4><p>Tocá una opción antes de que se acabe el tiempo. No se puede cambiar después.</p></div></div>
+      <div class="step"><div class="num">5</div><div class="tx"><h4>Sumá puntos</h4><p>Cada acierto suma +100 puntos, más un bonus extra si respondés rápido.</p></div></div>
+      <div class="step"><div class="num">6</div><div class="tx"><h4>Conseguí el mejor puntaje</h4><p>Al final vas a ver tu resumen completo y podés guardar tu récord.</p></div></div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <h4 style="margin-bottom:8px;">⚔️ Sobre el 1 vs 1</h4>
+      <p style="color:var(--text-dim); font-size:.88rem; line-height:1.5;">Ambos jugadores compiten con las mismas preguntas, en el mismo dispositivo, uno después del otro. Nadie ve la respuesta correcta hasta que los dos hayan contestado esa ronda, y el ganador solo se define al terminar todas las rondas.</p>
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary" onclick="showScreen('screen-home')">ENTENDIDO</button>
+    </div>
+  </section>
+
+  <!-- ============ QUESTION BANK ============ -->
+  <section class="screen" id="screen-bank">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('screen-home')">← Volver</button>
+      <div class="screen-title">Banco de preguntas</div>
+      <div style="width:90px"></div>
+    </div>
+    <div class="filter-row" id="bank-filters"></div>
+    <div id="bank-list"></div>
+  </section>
+
+  <!-- ============ RECORDS ============ -->
+  <section class="screen" id="screen-records">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('screen-home')">← Volver</button>
+      <div class="screen-title">Récords</div>
+      <div style="width:90px"></div>
+    </div>
+    <div class="rec-tabs">
+      <button class="btn btn-ghost active" id="tab-solo" onclick="switchRecTab('solo')">MODO SOLO</button>
+      <button class="btn btn-ghost" id="tab-mp" onclick="switchRecTab('mp')">1 VS 1</button>
+    </div>
+    <div class="card" id="records-solo-panel"></div>
+    <div class="card" id="records-mp-panel" style="display:none;"></div>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section class="screen" id="screen-settings">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('screen-home')">← Volver</button>
+      <div class="screen-title">Configuración</div>
+      <div style="width:90px"></div>
+    </div>
+    <div class="card">
+      <div class="toggle-row">
+        <div><strong>🔊 Sonido</strong><div style="color:var(--text-dim); font-size:.78rem;">Efectos al responder</div></div>
+        <button class="toggle" id="toggle-sound" onclick="toggleSetting('sound')"></button>
+      </div>
+      <div class="toggle-row">
+        <div><strong>✨ Animaciones</strong><div style="color:var(--text-dim); font-size:.78rem;">Transiciones y efectos visuales</div></div>
+        <button class="toggle" id="toggle-anim" onclick="toggleSetting('animations')"></button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="field">
+        <label>Cantidad de preguntas por partida</label>
+        <div class="seg" id="seg-count"></div>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>Dificultad</label>
+        <div class="seg" id="seg-diff"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <label style="display:block; font-weight:700; font-size:.85rem; color:var(--text-dim); margin-bottom:10px;">Categorías incluidas (para 1 vs 1 y modo aleatorio)</label>
+      <div class="chip-grid" id="settings-cats"></div>
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary" onclick="showScreen('screen-home')">GUARDAR Y VOLVER</button>
+    </div>
+  </section>
+
+  <!-- ============ SOLO SETUP ============ -->
+  <section class="screen" id="screen-solo-setup">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('screen-home')">← Volver</button>
+      <div class="screen-title">Jugar solo</div>
+      <div style="width:90px"></div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Tu nombre (para el récord)</label>
+        <input type="text" id="solo-name" placeholder="Jugador" maxlength="16">
+      </div>
+      <div class="field" style="margin-bottom:8px;">
+        <label>Elegí una categoría</label>
+      </div>
+      <div class="chip-grid" id="solo-cats"></div>
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary" id="solo-start-btn" onclick="startSoloGame()">JUGAR</button>
+    </div>
+  </section>
+
+  <!-- ============ MULTIPLAYER SETUP ============ -->
+  <section class="screen" id="screen-mp-setup">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('screen-home')">← Volver</button>
+      <div class="screen-title">1 vs 1</div>
+      <div style="width:90px"></div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>👤 Nombre del Jugador 1</label>
+        <input type="text" id="mp-name1" placeholder="Jugador 1" maxlength="16">
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>👤 Nombre del Jugador 2</label>
+        <input type="text" id="mp-name2" placeholder="Jugador 2" maxlength="16">
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px; font-size:.85rem; color:var(--text-dim); line-height:1.5;">
+      🎲 Se jugará con preguntas mezcladas de todas las categorías habilitadas en <strong>Configuración</strong>, con <span id="mp-info-count"></span> preguntas.
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary" onclick="startMpGame()">EMPEZAR PARTIDA</button>
+    </div>
+  </section>
+
+  <!-- ============ MP TURN TRANSITION ============ -->
+  <section class="screen" id="screen-mp-turn">
+    <div class="card turn-card">
+      <div class="ic" id="turn-icon">👤</div>
+      <h2 id="turn-title">Turno de Jugador 1</h2>
+      <p id="turn-sub">Pasá el dispositivo y tocá listo cuando estés preparado.</p>
+      <div style="margin-top:26px;">
+        <button class="btn btn-primary" onclick="beginTurnQuestion()">ESTOY LISTO</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GAME ============ -->
+  <section class="screen" id="screen-game">
+    <div class="game-top">
+      <div class="game-meta">
+        <span class="pill" id="game-progress">Pregunta 1 de 10</span>
+        <span class="pill" id="game-catname">Categoría</span>
+      </div>
+      <div id="game-score-solo" class="score-badge">⭐ <span id="solo-score-val">0</span></div>
+      <div id="game-score-mp" class="vs-board" style="display:none; flex:1; min-width:240px; margin:0;">
+        <div class="vs-side"><div class="nm" id="mp-p1-name">J1</div><div class="sc" id="mp-p1-score">0</div></div>
+        <div class="vs-mid">VS</div>
+        <div class="vs-side"><div class="nm" id="mp-p2-name">J2</div><div class="sc" id="mp-p2-score">0</div></div>
+      </div>
+    </div>
+    <div class="progressbar-wrap"><div class="progressbar-fill" id="game-progressbar" style="width:10%;"></div></div>
+    <div class="timer-wrap">
+      <div class="timer-ring" id="timer-ring">15</div>
+      <div class="timer-bar-wrap"><div class="timer-bar-fill" id="timer-bar"></div></div>
+    </div>
+    <div class="qcard">
+      <span class="catbadge" id="q-catbadge">Categoría</span>
+      <h3 id="q-text">¿Pregunta?</h3>
+      <div class="opts" id="q-opts"></div>
+      <div class="result-flash" id="q-flash"></div>
+    </div>
+    <div class="next-row">
+      <button class="btn btn-primary" id="next-btn" style="display:none; width:auto; padding:14px 30px;" onclick="advanceAfterAnswer()">SIGUIENTE →</button>
+    </div>
+  </section>
+
+  <!-- ============ MP ROUND RESULT ============ -->
+  <section class="screen" id="screen-round-result">
+    <div class="card">
+      <h3 style="text-align:center; margin-bottom:16px;">Resultado de la ronda</h3>
+      <div class="mp-compare" id="round-result-cols"></div>
+      <p style="text-align:center; color:var(--text-dim); font-size:.85rem;" id="round-correct-note"></p>
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary" onclick="nextRoundOrFinish()">SIGUIENTE →</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section class="screen" id="screen-results">
+    <div id="results-content"></div>
+  </section>
+
+</div>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAsJOS2gmE9JzvuNBk4plHulOMwToIue6o",
+    authDomain: "trivia-gg.firebaseapp.com",
+    databaseURL: "https://trivia-gg-default-rtdb.firebaseio.com",
+    projectId: "trivia-gg",
+    storageBucket: "trivia-gg.firebasestorage.app",
+    messagingSenderId: "727389662619",
+    appId: "1:727389662619:web:92c1b1ee3119220d02053e",
+    measurementId: "G-XT22S1CX8P"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // Expose app/analytics globally in case the game script (non-module) needs them later
+  window.__firebaseApp = app;
+  window.__firebaseAnalytics = analytics;
+</script>
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const CATS = {
+  historia:        {name:"Historia",           color:"var(--c-historia)",        icon:"🏛️"},
+  geografia:       {name:"Geografía",          color:"var(--c-geografia)",       icon:"🌍"},
+  ciencia:         {name:"Ciencia",             color:"var(--c-ciencia)",         icon:"🔬"},
+  tecnologia:      {name:"Tecnología",          color:"var(--c-tecnologia)",      icon:"💻"},
+  deportes:        {name:"Deportes",            color:"var(--c-deportes)",        icon:"⚽"},
+  cine:            {name:"Cine y Series",       color:"var(--c-cine)",            icon:"🎬"},
+  musica:          {name:"Música",              color:"var(--c-musica)",          icon:"🎵"},
+  arte:            {name:"Arte y Literatura",   color:"var(--c-arte)",            icon:"🎨"},
+  cultura:         {name:"Cultura General",     color:"var(--c-cultura)",         icon:"🧠"},
+  entretenimiento: {name:"Entretenimiento",     color:"var(--c-entretenimiento)", icon:"🎮"},
+};
+
+const QUESTIONS = [
+{id:"001",cat:"historia",dif:"facil",q:"¿En qué año llegó Cristóbal Colón a América?",opts:["1492","1500","1453","1521"],correct:0,expl:"Colón llegó a América el 12 de octubre de 1492."},
+{id:"002",cat:"historia",dif:"medio",q:"¿Quién fue el primer presidente constitucional de Argentina?",opts:["Bernardino Rivadavia","Justo José de Urquiza","Domingo Faustino Sarmiento","Bartolomé Mitre"],correct:0,expl:"Bernardino Rivadavia asumió como primer presidente en 1826."},
+{id:"003",cat:"historia",dif:"medio",q:"¿En qué año cayó el Muro de Berlín?",opts:["1985","1989","1991","1993"],correct:1,expl:"El Muro de Berlín cayó el 9 de noviembre de 1989."},
+{id:"004",cat:"historia",dif:"dificil",q:"¿Qué imperio gobernaba Moctezuma II cuando llegaron los españoles?",opts:["Imperio Inca","Imperio Azteca","Imperio Maya","Imperio Tolteca"],correct:1,expl:"Moctezuma II era el gobernante del Imperio Azteca."},
+{id:"005",cat:"historia",dif:"facil",q:"¿Quién lideró la independencia de la India mediante la resistencia pacífica?",opts:["Nelson Mandela","Mahatma Gandhi","Martin Luther King","Jawaharlal Nehru"],correct:1,expl:"Mahatma Gandhi promovió la resistencia no violenta contra el dominio británico."},
+
+{id:"006",cat:"geografia",dif:"facil",q:"¿Cuál es la capital de Argentina?",opts:["Córdoba","Buenos Aires","Rosario","Mendoza"],correct:1,expl:"Buenos Aires es la capital de Argentina."},
+{id:"007",cat:"geografia",dif:"facil",q:"¿Cuál es el país más grande del mundo por superficie?",opts:["Canadá","Rusia","China","Estados Unidos"],correct:1,expl:"Rusia es el país más extenso del mundo."},
+{id:"008",cat:"geografia",dif:"medio",q:"¿En qué continente se encuentra el desierto del Sahara?",opts:["Asia","África","Oceanía","América"],correct:1,expl:"El Sahara está en el norte de África."},
+{id:"009",cat:"geografia",dif:"medio",q:"¿Cuál es el océano más grande del mundo?",opts:["Atlántico","Índico","Pacífico","Ártico"],correct:2,expl:"El océano Pacífico es el más extenso del planeta."},
+{id:"010",cat:"geografia",dif:"dificil",q:"¿Cuál es la cordillera más larga del mundo?",opts:["Himalaya","Andes","Montañas Rocosas","Alpes"],correct:1,expl:"La cordillera de los Andes recorre Sudamérica y es la más larga en tierra."},
+
+{id:"011",cat:"ciencia",dif:"facil",q:"¿Cuál es el planeta más cercano al Sol?",opts:["Venus","Tierra","Mercurio","Marte"],correct:2,expl:"Mercurio es el planeta más cercano al Sol."},
+{id:"012",cat:"ciencia",dif:"facil",q:"¿Cuál es el símbolo químico del oro?",opts:["Ag","Au","Fe","Pb"],correct:1,expl:"El símbolo del oro es Au, del latín 'aurum'."},
+{id:"013",cat:"ciencia",dif:"medio",q:"¿Cuántos huesos tiene aproximadamente el cuerpo humano adulto?",opts:["156","206","256","306"],correct:1,expl:"El esqueleto adulto tiene 206 huesos."},
+{id:"014",cat:"ciencia",dif:"medio",q:"¿Qué gas es esencial para la respiración humana?",opts:["Nitrógeno","Oxígeno","Dióxido de carbono","Hidrógeno"],correct:1,expl:"El oxígeno es indispensable para la respiración celular."},
+{id:"015",cat:"ciencia",dif:"dificil",q:"¿Quién formuló la teoría de la relatividad?",opts:["Isaac Newton","Niels Bohr","Albert Einstein","Galileo Galilei"],correct:2,expl:"Albert Einstein publicó la teoría de la relatividad a principios del siglo XX."},
+
+{id:"016",cat:"tecnologia",dif:"facil",q:"¿Qué significa la sigla 'PC'?",opts:["Personal Computer","Public Computer","Private Code","Program Control"],correct:0,expl:"PC significa 'Personal Computer' (computadora personal)."},
+{id:"017",cat:"tecnologia",dif:"facil",q:"¿Qué empresa creó el sistema operativo Windows?",opts:["Apple","Microsoft","Google","IBM"],correct:1,expl:"Microsoft desarrolló Windows."},
+{id:"018",cat:"tecnologia",dif:"medio",q:"¿Qué significa la sigla 'WWW'?",opts:["World Wide Web","World Wide Wire","Web Wide World","Wide World Web"],correct:0,expl:"WWW significa 'World Wide Web'."},
+{id:"019",cat:"tecnologia",dif:"medio",q:"¿Qué lenguaje de programación usa como símbolo una serpiente?",opts:["Java","Python","Ruby","C++"],correct:1,expl:"Python usa una serpiente como parte de su identidad visual."},
+{id:"020",cat:"tecnologia",dif:"dificil",q:"¿En qué año se fundó la empresa Apple?",opts:["1974","1976","1980","1984"],correct:1,expl:"Apple fue fundada en 1976."},
+
+{id:"021",cat:"deportes",dif:"facil",q:"¿Cada cuántos años se celebran los Juegos Olímpicos de verano?",opts:["2","3","4","5"],correct:2,expl:"Los Juegos Olímpicos de verano se celebran cada 4 años."},
+{id:"022",cat:"deportes",dif:"facil",q:"¿Cuántos jugadores tiene un equipo de fútbol en cancha?",opts:["9","10","11","12"],correct:2,expl:"Cada equipo de fútbol juega con 11 jugadores en cancha."},
+{id:"023",cat:"deportes",dif:"medio",q:"¿Qué país ganó el Mundial de fútbol de 2022?",opts:["Francia","Brasil","Argentina","España"],correct:2,expl:"Argentina se consagró campeón del Mundial de Qatar 2022."},
+{id:"024",cat:"deportes",dif:"medio",q:"¿En qué juego se usa el término 'jaque mate'?",opts:["Ajedrez","Damas","Backgammon","Póker"],correct:0,expl:"'Jaque mate' es el término que define el final de una partida de ajedrez."},
+{id:"025",cat:"deportes",dif:"dificil",q:"¿Cuántos anillos tiene el símbolo olímpico?",opts:["4","5","6","7"],correct:1,expl:"El símbolo olímpico tiene 5 anillos entrelazados."},
+
+{id:"026",cat:"cine",dif:"facil",q:"¿Quién dirigió la película 'Jurassic Park'?",opts:["Steven Spielberg","James Cameron","George Lucas","Ridley Scott"],correct:0,expl:"Steven Spielberg dirigió 'Jurassic Park' (1993)."},
+{id:"027",cat:"cine",dif:"facil",q:"¿Qué serie sigue a un profesor de química que se convierte en fabricante de drogas?",opts:["Breaking Bad","The Wire","Dexter","Narcos"],correct:0,expl:"Esa es la premisa central de 'Breaking Bad'."},
+{id:"028",cat:"cine",dif:"medio",q:"¿Qué actor interpretó a Iron Man en el universo cinematográfico de Marvel?",opts:["Chris Evans","Robert Downey Jr.","Chris Hemsworth","Mark Ruffalo"],correct:1,expl:"Robert Downey Jr. dio vida a Tony Stark / Iron Man."},
+{id:"029",cat:"cine",dif:"medio",q:"¿Qué película ganó el Óscar a Mejor Película en 2020?",opts:["1917","Joker","Parásitos","Once Upon a Time in Hollywood"],correct:2,expl:"'Parásitos' (Corea del Sur) ganó el Óscar a Mejor Película ese año."},
+{id:"030",cat:"cine",dif:"dificil",q:"¿Quién compuso la banda sonora original de 'El Padrino'?",opts:["John Williams","Nino Rota","Ennio Morricone","Hans Zimmer"],correct:1,expl:"Nino Rota compuso la icónica banda sonora de 'El Padrino'."},
+
+{id:"031",cat:"musica",dif:"facil",q:"¿Cuántas cuerdas tiene una guitarra clásica?",opts:["4","5","6","7"],correct:2,expl:"La guitarra clásica tiene 6 cuerdas."},
+{id:"032",cat:"musica",dif:"facil",q:"¿Qué banda británica formaron John Lennon y Paul McCartney?",opts:["The Rolling Stones","The Beatles","Queen","Pink Floyd"],correct:1,expl:"Lennon y McCartney fueron miembros fundadores de The Beatles."},
+{id:"033",cat:"musica",dif:"medio",q:"¿A quién se conoce como el 'Rey del Pop'?",opts:["Elvis Presley","Prince","Michael Jackson","Freddie Mercury"],correct:2,expl:"Michael Jackson es conocido mundialmente como el 'Rey del Pop'."},
+{id:"034",cat:"musica",dif:"medio",q:"¿Qué instrumento tiene 88 teclas?",opts:["Órgano","Piano","Acordeón","Xilófono"],correct:1,expl:"El piano estándar tiene 88 teclas."},
+{id:"035",cat:"musica",dif:"dificil",q:"¿Qué compositor quedó sordo y aun así siguió componiendo obras maestras?",opts:["Mozart","Bach","Beethoven","Chopin"],correct:2,expl:"Ludwig van Beethoven compuso gran parte de su obra tardía siendo sordo."},
+
+{id:"036",cat:"arte",dif:"facil",q:"¿Quién pintó 'La Mona Lisa'?",opts:["Miguel Ángel","Leonardo da Vinci","Rafael","Rembrandt"],correct:1,expl:"Leonardo da Vinci pintó 'La Mona Lisa'."},
+{id:"037",cat:"arte",dif:"facil",q:"¿Quién escribió 'Don Quijote de la Mancha'?",opts:["Gabriel García Márquez","Miguel de Cervantes","Pablo Neruda","Jorge Luis Borges"],correct:1,expl:"Miguel de Cervantes escribió esta obra cumbre de la literatura española."},
+{id:"038",cat:"arte",dif:"medio",q:"¿Qué artista es famoso por haberse cortado una oreja?",opts:["Pablo Picasso","Vincent van Gogh","Salvador Dalí","Claude Monet"],correct:1,expl:"Vincent van Gogh se cortó parte de su oreja izquierda en 1888."},
+{id:"039",cat:"arte",dif:"medio",q:"¿Quién escribió 'Cien años de soledad'?",opts:["Mario Vargas Llosa","Gabriel García Márquez","Julio Cortázar","Isabel Allende"],correct:1,expl:"Gabriel García Márquez escribió esta obra del realismo mágico."},
+{id:"040",cat:"arte",dif:"dificil",q:"¿A qué movimiento artístico pertenece Salvador Dalí?",opts:["Cubismo","Surrealismo","Impresionismo","Expresionismo"],correct:1,expl:"Salvador Dalí es uno de los máximos referentes del surrealismo."},
+
+{id:"041",cat:"cultura",dif:"facil",q:"¿Cuántos días tiene un año bisiesto?",opts:["364","365","366","367"],correct:2,expl:"Un año bisiesto tiene 366 días."},
+{id:"042",cat:"cultura",dif:"facil",q:"¿Cuál es el metal líquido a temperatura ambiente?",opts:["Hierro","Mercurio","Plomo","Aluminio"],correct:1,expl:"El mercurio es líquido a temperatura ambiente."},
+{id:"043",cat:"cultura",dif:"medio",q:"¿Cuántos continentes existen según la clasificación más común?",opts:["5","6","7","8"],correct:2,expl:"La clasificación más extendida reconoce 7 continentes."},
+{id:"044",cat:"cultura",dif:"medio",q:"¿Qué idioma tiene más hablantes nativos en el mundo?",opts:["Inglés","Español","Mandarín","Hindi"],correct:2,expl:"El mandarín es el idioma con más hablantes nativos del mundo."},
+{id:"045",cat:"cultura",dif:"dificil",q:"¿Cuál es la moneda oficial de Japón?",opts:["Yuan","Won","Yen","Ringgit"],correct:2,expl:"El yen es la moneda oficial de Japón."},
+
+{id:"046",cat:"entretenimiento",dif:"facil",q:"¿Qué compañía creó la consola PlayStation?",opts:["Microsoft","Sony","Nintendo","Sega"],correct:1,expl:"Sony lanzó la primera PlayStation en 1994."},
+{id:"047",cat:"entretenimiento",dif:"facil",q:"¿Qué red social es conocida por sus videos cortos y virales?",opts:["Instagram","TikTok","Snapchat","Twitter"],correct:1,expl:"TikTok se popularizó mundialmente por su formato de video corto."},
+{id:"048",cat:"entretenimiento",dif:"medio",q:"¿Cómo se llama el popular juego de construcción con bloques de plástico daneses?",opts:["Playmobil","Lego","Meccano","K'nex"],correct:1,expl:"Lego es la marca danesa de bloques de construcción."},
+{id:"049",cat:"entretenimiento",dif:"medio",q:"¿En qué país se originó el anime?",opts:["China","Corea del Sur","Japón","Tailandia"],correct:2,expl:"El anime es un estilo de animación originado en Japón."},
+{id:"050",cat:"entretenimiento",dif:"dificil",q:"¿Cuál fue la primera consola doméstica exitosa comercialmente, lanzada en 1972?",opts:["Atari 2600","Magnavox Odyssey","Nintendo NES","Sega Genesis"],correct:1,expl:"La Magnavox Odyssey (1972) fue la primera consola doméstica comercial."},
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const DEFAULT_SETTINGS = {
+  sound:true, animations:true, numQuestions:10, difficulty:"aleatorio",
+  categories: Object.keys(CATS)
+};
+let settings = loadSettings();
+let records = loadRecords();
+
+let game = null; // active game session
+let selectedSoloCat = "todas";
+const QUESTION_TIME = 15; // seconds
+
+/* ============================================================
+   STORAGE
+   ============================================================ */
+function loadSettings(){
+  try{
+    const raw = localStorage.getItem("triviagg_settings");
+    if(raw) return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(raw));
+  }catch(e){}
+  return Object.assign({}, DEFAULT_SETTINGS);
+}
+function saveSettings(){
+  try{ localStorage.setItem("triviagg_settings", JSON.stringify(settings)); }catch(e){}
+}
+function loadRecords(){
+  try{
+    const raw = localStorage.getItem("triviagg_records");
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {solo:[], mp:[]};
+}
+function saveRecords(){
+  try{ localStorage.setItem("triviagg_records", JSON.stringify(records)); }catch(e){}
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0, behavior: settings.animations ? "smooth":"auto"});
+}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function pickQuestions(catFilter, count){
+  let pool = QUESTIONS.filter(q=>{
+    const catOk = (catFilter==="todas") ? settings.categories.includes(q.cat) : q.cat===catFilter;
+    const difOk = (settings.difficulty==="aleatorio") ? true : q.dif===settings.difficulty;
+    return catOk && difOk;
+  });
+  if(pool.length < count){
+    // fallback: relax difficulty filter if pool too small
+    pool = QUESTIONS.filter(q=> (catFilter==="todas") ? settings.categories.includes(q.cat) : q.cat===catFilter );
+  }
+  const chosen = shuffle(pool).slice(0, Math.min(count, pool.length));
+  return chosen.map(q=>{
+    const optOrder = shuffle(q.opts.map((text,i)=>({text,isCorrect:i===q.correct})));
+    return {...q, shuffledOpts:optOrder};
+  });
+}
+function fmtDate(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"});
+}
+
+/* ============================================================
+   HOME / QUICK ENTRIES
+   ============================================================ */
+function goSoloSetup(){
+  buildSoloCatChips();
+  const nameEl = document.getElementById("solo-name");
+  if(!nameEl.value) nameEl.value = "";
+  showScreen("screen-solo-setup");
+}
+function goMpSetup(){
+  document.getElementById("mp-info-count").textContent = settings.numQuestions;
+  showScreen("screen-mp-setup");
+}
+
+/* ---- Solo category chips ---- */
+function buildSoloCatChips(){
+  const wrap = document.getElementById("solo-cats");
+  wrap.innerHTML = "";
+  const allChip = document.createElement("button");
+  allChip.className = "chip chip-all" + (selectedSoloCat==="todas" ? " selected":"");
+  allChip.style.setProperty("--cat-color","var(--pink)");
+  allChip.innerHTML = `<span class="ic">🎲</span><span>TODAS</span>`;
+  allChip.onclick = ()=>{ selectedSoloCat="todas"; buildSoloCatChips(); };
+  wrap.appendChild(allChip);
+  Object.entries(CATS).forEach(([key,c])=>{
+    const chip = document.createElement("button");
+    chip.className = "chip" + (selectedSoloCat===key ? " selected":"");
+    chip.style.setProperty("--cat-color", c.color);
+    chip.innerHTML = `<span class="ic">${c.icon}</span><span>${c.name}</span>`;
+    chip.onclick = ()=>{ selectedSoloCat=key; buildSoloCatChips(); };
+    wrap.appendChild(chip);
+  });
+}
+
+/* ============================================================
+   SETTINGS SCREEN
+   ============================================================ */
+function openSettings(){ renderSettings(); showScreen("screen-settings"); }
+function renderSettings(){
+  document.getElementById("toggle-sound").classList.toggle("on", settings.sound);
+  document.getElementById("toggle-anim").classList.toggle("on", settings.animations);
+
+  const segCount = document.getElementById("seg-count");
+  segCount.innerHTML = "";
+  [5,10,15,20].forEach(n=>{
+    const b = document.createElement("button");
+    b.textContent = n;
+    if(settings.numQuestions===n) b.classList.add("active");
+    b.onclick = ()=>{ settings.numQuestions=n; saveSettings(); renderSettings(); };
+    segCount.appendChild(b);
+  });
+
+  const segDiff = document.getElementById("seg-diff");
+  segDiff.innerHTML = "";
+  [["facil","Fácil"],["medio","Medio"],["dificil","Difícil"],["aleatorio","Aleatorio"]].forEach(([val,label])=>{
+    const b = document.createElement("button");
+    b.textContent = label;
+    if(settings.difficulty===val) b.classList.add("active");
+    b.onclick = ()=>{ settings.difficulty=val; saveSettings(); renderSettings(); };
+    segDiff.appendChild(b);
+  });
+
+  const catsWrap = document.getElementById("settings-cats");
+  catsWrap.innerHTML = "";
+  Object.entries(CATS).forEach(([key,c])=>{
+    const chip = document.createElement("button");
+    const active = settings.categories.includes(key);
+    chip.className = "chip" + (active ? " selected":"");
+    chip.style.setProperty("--cat-color", c.color);
+    chip.innerHTML = `<span class="ic">${c.icon}</span><span>${c.name}</span>`;
+    chip.onclick = ()=>{
+      if(active){
+        if(settings.categories.length>1) settings.categories = settings.categories.filter(k=>k!==key);
+      } else {
+        settings.categories.push(key);
+      }
+      saveSettings(); renderSettings();
+    };
+    catsWrap.appendChild(chip);
+  });
+}
+function toggleSetting(key){
+  settings[key] = !settings[key];
+  saveSettings();
+  renderSettings();
+}
+
+/* ============================================================
+   QUESTION BANK
+   ============================================================ */
+let bankCatFilter = "todas";
+function openBank(){
+  buildBankFilters();
+  renderBank();
+  showScreen("screen-bank");
+}
+function buildBankFilters(){
+  const wrap = document.getElementById("bank-filters");
+  wrap.innerHTML = "";
+  const all = document.createElement("button");
+  all.className = "fchip" + (bankCatFilter==="todas" ? " active":"");
+  all.textContent = "TODAS";
+  all.onclick = ()=>{ bankCatFilter="todas"; buildBankFilters(); renderBank(); };
+  wrap.appendChild(all);
+  Object.entries(CATS).forEach(([key,c])=>{
+    const b = document.createElement("button");
+    b.className = "fchip" + (bankCatFilter===key ? " active":"");
+    b.textContent = c.icon + " " + c.name;
+    b.onclick = ()=>{ bankCatFilter=key; buildBankFilters(); renderBank(); };
+    wrap.appendChild(b);
+  });
+}
+function renderBank(){
+  const list = document.getElementById("bank-list");
+  list.innerHTML = "";
+  const items = QUESTIONS.filter(q=> bankCatFilter==="todas" || q.cat===bankCatFilter);
+  items.forEach(q=>{
+    const c = CATS[q.cat];
+    const item = document.createElement("div");
+    item.className = "bank-item";
+    item.style.setProperty("--cat-color", c.color);
+    const diffLabel = {facil:"Fácil",medio:"Medio",dificil:"Difícil"}[q.dif];
+    item.innerHTML = `
+      <div class="bank-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="catdot"></span>
+        <span class="qtxt">${q.q}</span>
+        <span class="pill" style="flex-shrink:0;">${diffLabel}</span>
+        <span class="car">▶</span>
+      </div>
+      <div class="bank-body"><div class="bank-body-in">
+        ${q.opts.map((o,i)=>`<div class="bank-opt ${i===q.correct?'correct':''}">${String.fromCharCode(65+i)}) ${o}${i===q.correct?' ✓':''}</div>`).join("")}
+        <div class="bank-expl">💡 ${q.expl}</div>
+      </div></div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+/* ============================================================
+   RECORDS
+   ============================================================ */
+function openRecords(){ switchRecTab('solo'); showScreen("screen-records"); }
+function switchRecTab(tab){
+  document.getElementById("tab-solo").classList.toggle("active", tab==="solo");
+  document.getElementById("tab-mp").classList.toggle("active", tab==="mp");
+  document.getElementById("records-solo-panel").style.display = tab==="solo" ? "block":"none";
+  document.getElementById("records-mp-panel").style.display = tab==="mp" ? "block":"none";
+  renderRecords();
+}
+function renderRecords(){
+  const soloPanel = document.getElementById("records-solo-panel");
+  const soloList = records.solo.slice().sort((a,b)=>b.score-a.score).slice(0,10);
+  if(soloList.length===0){
+    soloPanel.innerHTML = `<div class="empty-state"><div class="ic">🏆</div>Todavía no hay récords en modo solo.<br>¡Jugá una partida para aparecer acá!</div>`;
+  } else {
+    soloPanel.innerHTML = `<table class="rec-table"><thead><tr><th>#</th><th>Jugador</th><th>Puntos</th><th>Aciertos</th><th>Categoría</th><th>Fecha</th></tr></thead><tbody>
+      ${soloList.map((r,i)=>`<tr>
+        <td><span class="rank ${i===0?'g1':i===1?'g2':i===2?'g3':''}">${i+1}</span></td>
+        <td>${r.name}</td><td>${r.score}</td><td>${r.correct}/${r.total}</td><td>${r.category}</td><td>${fmtDate(r.date)}</td>
+      </tr>`).join("")}
+    </tbody></table>`;
+  }
+
+  const mpPanel = document.getElementById("records-mp-panel");
+  const mpList = records.mp.slice().sort((a,b)=>Math.max(b.score1,b.score2)-Math.max(a.score1,a.score2)).slice(0,10);
+  if(mpList.length===0){
+    mpPanel.innerHTML = `<div class="empty-state"><div class="ic">⚔️</div>Todavía no hay récords en 1 vs 1.<br>¡Jugá una partida para aparecer acá!</div>`;
+  } else {
+    mpPanel.innerHTML = `<table class="rec-table"><thead><tr><th>#</th><th>Partida</th><th>Resultado</th><th>Fecha</th></tr></thead><tbody>
+      ${mpList.map((r,i)=>`<tr>
+        <td><span class="rank ${i===0?'g1':i===1?'g2':i===2?'g3':''}">${i+1}</span></td>
+        <td>${r.p1} vs ${r.p2}</td>
+        <td>${r.score1} - ${r.score2} ${r.winner ? '(gana '+r.winner+')' : '(empate)'}</td>
+        <td>${fmtDate(r.date)}</td>
+      </tr>`).join("")}
+    </tbody></table>`;
+  }
+}
+
+/* ============================================================
+   GAME ENGINE (shared)
+   ============================================================ */
+let timerInterval = null;
+let timerDeadline = 0;
+let answered = false;
+
+function startSoloGame(){
+  const name = document.getElementById("solo-name").value.trim() || "Jugador";
+  const qs = pickQuestions(selectedSoloCat, settings.numQuestions);
+  game = {
+    mode:"solo",
+    name,
+    category: selectedSoloCat==="todas" ? "Todas" : CATS[selectedSoloCat].name,
+    questions: qs,
+    index:0,
+    score:0,
+    correctCount:0,
+    incorrectCount:0,
+    startTime: Date.now(),
+    log:[]
+  };
+  document.getElementById("game-score-solo").style.display = "flex";
+  document.getElementById("game-score-mp").style.display = "none";
+  showScreen("screen-game");
+  renderQuestion();
+}
+
+function startMpGame(){
+  const n1 = document.getElementById("mp-name1").value.trim() || "Jugador 1";
+  const n2 = document.getElementById("mp-name2").value.trim() || "Jugador 2";
+  const qs = pickQuestions("todas", settings.numQuestions);
+  game = {
+    mode:"mp",
+    players:[{name:n1,score:0,correct:0,incorrect:0},{name:n2,score:0,correct:0,incorrect:0}],
+    questions: qs,
+    index:0,
+    turn:0, // 0 = player1 answering, 1 = player2 answering
+    roundAnswers:[null,null],
+    startTime: Date.now(),
+  };
+  document.getElementById("game-score-solo").style.display = "none";
+  document.getElementById("game-score-mp").style.display = "flex";
+  document.getElementById("mp-p1-name").textContent = n1;
+  document.getElementById("mp-p2-name").textContent = n2;
+  document.getElementById("mp-p1-score").textContent = "0";
+  document.getElementById("mp-p2-score").textContent = "0";
+  startMpTurn();
+}
+
+function startMpTurn(){
+  game.turn = 0;
+  game.roundAnswers = [null,null];
+  showTurnScreen();
+}
+function showTurnScreen(){
+  const p = game.players[game.turn];
+  document.getElementById("turn-icon").textContent = game.turn===0 ? "🥇" : "🥈";
+  document.getElementById("turn-title").textContent = `Turno de ${p.name}`;
+  document.getElementById("turn-sub").textContent = game.turn===0
+    ? "Pasá el dispositivo a este jugador y tocá listo."
+    : "Ahora le toca al otro jugador. Pasá el dispositivo y tocá listo.";
+  showScreen("screen-mp-turn");
+}
+function beginTurnQuestion(){
+  showScreen("screen-game");
+  renderQuestion();
+}
+
+function currentQuestion(){ return game.questions[game.index]; }
+
+function renderQuestion(){
+  answered = false;
+  const q = currentQuestion();
+  const c = CATS[q.cat];
+  document.getElementById("next-btn").style.display = "none";
+  document.getElementById("q-flash").className = "result-flash";
+  document.getElementById("q-flash").innerHTML = "";
+
+  document.getElementById("game-progress").textContent = `Pregunta ${game.index+1} de ${game.questions.length}`;
+  document.getElementById("game-catname").textContent = c.icon + " " + c.name;
+  document.getElementById("game-progressbar").style.width = `${((game.index)/game.questions.length)*100+ (100/game.questions.length)*0}%`;
+  document.getElementById("game-progressbar").style.width = `${((game.index+1)/game.questions.length)*100}%`;
+
+  document.getElementById("q-catbadge").textContent = c.icon + " " + c.name;
+  document.getElementById("q-catbadge").style.background = c.color;
+  document.getElementById("q-text").textContent = q.q;
+
+  if(game.mode==="solo"){
+    document.getElementById("solo-score-val").textContent = game.score;
+  } else {
+    document.getElementById("mp-p1-score").textContent = game.players[0].score;
+    document.getElementById("mp-p2-score").textContent = game.players[1].score;
+  }
+
+  const optsWrap = document.getElementById("q-opts");
+  optsWrap.innerHTML = "";
+  q.shuffledOpts.forEach((opt,i)=>{
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="letter">${String.fromCharCode(65+i)}</span><span>${opt.text}</span>`;
+    b.onclick = ()=> selectAnswer(i);
+    optsWrap.appendChild(b);
+  });
+
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  const total = QUESTION_TIME;
+  timerDeadline = Date.now() + total*1000;
+  updateTimerUI(total,total);
+  timerInterval = setInterval(()=>{
+    const remainMs = timerDeadline - Date.now();
+    const remain = Math.max(0, remainMs/1000);
+    updateTimerUI(remain, total);
+    if(remain<=0){
+      clearInterval(timerInterval);
+      if(!answered) selectAnswer(-1); // timeout
+    }
+  },100);
+}
+function updateTimerUI(remain,total){
+  document.getElementById("timer-ring").textContent = Math.ceil(remain);
+  document.getElementById("timer-bar").style.width = `${(remain/total)*100}%`;
+}
+
+function selectAnswer(choiceIndex){
+  if(answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  const q = currentQuestion();
+  const opts = q.shuffledOpts;
+  const correctIndex = opts.findIndex(o=>o.isCorrect);
+  const isCorrect = choiceIndex === correctIndex;
+  const timeUsed = QUESTION_TIME - (Math.max(0,(timerDeadline-Date.now()))/1000);
+  const timeLeftFrac = Math.max(0, Math.min(1, (timerDeadline-Date.now())/1000/QUESTION_TIME));
+  const speedBonus = isCorrect ? Math.round(timeLeftFrac*50) : 0;
+  const points = isCorrect ? 100+speedBonus : 0;
+
+  // lock + highlight options
+  const optButtons = document.querySelectorAll("#q-opts .opt");
+  optButtons.forEach((btn,i)=>{
+    btn.disabled = true;
+    if(i===correctIndex) btn.classList.add("correct");
+    else if(i===choiceIndex) btn.classList.add("wrong");
+    else btn.classList.add("dim");
+    if(i===correctIndex){
+      const check = document.createElement("span");
+      check.textContent = "✓";
+      check.style.marginLeft="auto";
+      btn.appendChild(check);
+    } else if(i===choiceIndex){
+      const cross = document.createElement("span");
+      cross.textContent = "✕";
+      cross.style.marginLeft="auto";
+      btn.appendChild(cross);
+    }
+  });
+
+  if(game.mode==="solo"){
+    if(isCorrect){ game.score += points; game.correctCount++; }
+    else { game.incorrectCount++; }
+    game.log.push({id:q.id, correct:isCorrect, points});
+
+    const flash = document.getElementById("q-flash");
+    flash.classList.add("show", isCorrect ? "good":"bad");
+    if(isCorrect){
+      flash.innerHTML = `<span>✅ ¡CORRECTO! +100</span><span>⚡ BONUS DE VELOCIDAD +${speedBonus}</span><span>= +${points} PUNTOS</span><div class="result-explain">💡 ${q.expl}</div>`;
+    } else {
+      const wrongMsg = choiceIndex===-1 ? "⏱️ ¡SE ACABÓ EL TIEMPO!" : "❌ INCORRECTO";
+      flash.innerHTML = `<span>${wrongMsg}</span><div class="result-explain">💡 ${q.expl}</div>`;
+    }
+    document.getElementById("solo-score-val").textContent = game.score;
+    document.getElementById("next-btn").style.display = "block";
+    document.getElementById("next-btn").textContent = (game.index+1 < game.questions.length) ? "SIGUIENTE →" : "VER RESULTADOS →";
+    scheduleAutoAdvance();
+  } else {
+    // multiplayer: store this player's answer, don't reveal result yet
+    game.roundAnswers[game.turn] = {choiceIndex, isCorrect, points, timeLeftFrac};
+    const p = game.players[game.turn];
+    const flash = document.getElementById("q-flash");
+    flash.classList.add("show");
+    flash.style.background = "var(--card-2)"; flash.style.border="1px solid var(--line)"; flash.style.color="var(--text)";
+    flash.innerHTML = `<span>Respuesta registrada para ${p.name}. ${game.turn===0 ? "Pasále el dispositivo al siguiente jugador." : "¡Ambos respondieron! Viendo el resultado…"}</span>`;
+    document.getElementById("next-btn").style.display = "block";
+    document.getElementById("next-btn").textContent = game.turn===0 ? "CONTINUAR →" : "VER RONDA →";
+    scheduleAutoAdvance();
+  }
+}
+
+let autoAdvanceTimeout = null;
+function scheduleAutoAdvance(){
+  clearTimeout(autoAdvanceTimeout);
+  autoAdvanceTimeout = setTimeout(()=>{
+    advanceAfterAnswer();
+  }, 3200);
+}
+
+function advanceAfterAnswer(){
+  clearTimeout(autoAdvanceTimeout);
+  document.getElementById("next-btn").style.display = "none";
+  if(game.mode==="solo"){
+    game.index++;
+    if(game.index >= game.questions.length){ finishSoloGame(); }
+    else { renderQuestion(); }
+  } else {
+    if(game.turn===0){
+      game.turn = 1;
+      showTurnScreen();
+    } else {
+      showRoundResult();
+    }
+  }
+}
+
+function showRoundResult(){
+  const q = currentQuestion();
+  const opts = q.shuffledOpts;
+  const correctIndex = opts.findIndex(o=>o.isCorrect);
+  const cols = document.getElementById("round-result-cols");
+  cols.innerHTML = "";
+  game.players.forEach((p,idx)=>{
+    const ans = game.roundAnswers[idx];
+    if(ans.isCorrect){ p.score += ans.points; p.correct++; }
+    else { p.incorrect++; }
+    const col = document.createElement("div");
+    col.className = "mp-col";
+    const chosenText = ans.choiceIndex>=0 ? opts[ans.choiceIndex].text : "Sin responder";
+    col.innerHTML = `
+      <div class="crown">${ans.isCorrect ? "✅":"❌"}</div>
+      <div class="name">${p.name}</div>
+      <div class="pts">${ans.isCorrect ? "+"+ans.points : "+0"}</div>
+      <div class="sub">${chosenText}</div>
+    `;
+    cols.appendChild(col);
+  });
+  document.getElementById("round-correct-note").innerHTML = `Respuesta correcta: <strong>${opts[correctIndex].text}</strong><br><span style="font-size:.8rem;">💡 ${q.expl}</span>`;
+  document.getElementById("mp-p1-score").textContent = game.players[0].score;
+  document.getElementById("mp-p2-score").textContent = game.players[1].score;
+  showScreen("screen-round-result");
+}
+
+function nextRoundOrFinish(){
+  game.index++;
+  if(game.index >= game.questions.length){
+    finishMpGame();
+  } else {
+    startMpTurn();
+  }
+}
+
+/* ============================================================
+   RESULTS
+   ============================================================ */
+function finishSoloGame(){
+  const totalTime = Math.round((Date.now()-game.startTime)/1000);
+  const pct = Math.round((game.correctCount/game.questions.length)*100);
+  records.solo.push({
+    name: game.name, score: game.score, category: game.category,
+    correct: game.correctCount, total: game.questions.length, date: Date.now()
+  });
+  saveRecords();
+
+  let msg, emoji;
+  if(pct>=80){ msg="¡Sos una máquina de responder!"; emoji="🏆"; }
+  else if(pct>=50){ msg="¡Buen trabajo, seguí sumando!"; emoji="🎉"; }
+  else { msg="¡No te rindas, la próxima la rompés!"; emoji="💪"; }
+
+  const mm = Math.floor(totalTime/60), ss = totalTime%60;
+  const content = document.getElementById("results-content");
+  content.innerHTML = `
+    <div class="result-hero">
+      <div class="emoji">${emoji}</div>
+      <h2>RESULTADO FINAL</h2>
+      <p>${msg}</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="v">${game.score}</div><div class="l">PUNTAJE</div></div>
+      <div class="stat-box"><div class="v">${game.correctCount}/${game.questions.length}</div><div class="l">CORRECTAS</div></div>
+      <div class="stat-box"><div class="v">${game.incorrectCount}/${game.questions.length}</div><div class="l">INCORRECTAS</div></div>
+      <div class="stat-box"><div class="v">${pct}%</div><div class="l">ACIERTOS</div></div>
+    </div>
+    <div class="card" style="text-align:center; margin-bottom:20px;">
+      ⏱️ Tiempo utilizado: <strong>${mm}m ${ss}s</strong> · Categoría: <strong>${game.category}</strong>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goSoloSetup()">JUGAR DE NUEVO</button>
+      <button class="btn btn-ghost" onclick="showScreen('screen-home')">VOLVER AL INICIO</button>
+    </div>
+  `;
+  showScreen("screen-results");
+}
+
+function finishMpGame(){
+  const [p1,p2] = game.players;
+  let winner = null;
+  if(p1.score>p2.score) winner=p1.name;
+  else if(p2.score>p1.score) winner=p2.name;
+
+  records.mp.push({
+    p1:p1.name, p2:p2.name, score1:p1.score, score2:p2.score, winner, date: Date.now()
+  });
+  saveRecords();
+
+  const content = document.getElementById("results-content");
+  const diff = Math.abs(p1.score-p2.score);
+  content.innerHTML = `
+    <div class="result-hero">
+      <div class="emoji">${winner ? "🏆" : "🤝"}</div>
+      <h2>RESULTADO DE LA PARTIDA</h2>
+      <p>${winner ? `¡${winner} gana la partida!` : "¡EMPATE!"}</p>
+    </div>
+    <div class="mp-compare">
+      <div class="mp-col ${winner===p1.name?'winner':''}">
+        ${winner===p1.name ? '<div class="crown">👑</div>' : ''}
+        <div class="name">${p1.name}</div>
+        <div class="pts">${p1.score}</div>
+        <div class="sub">${p1.correct} correctas · ${p1.incorrect} incorrectas</div>
+      </div>
+      <div class="mp-col ${winner===p2.name?'winner':''}">
+        ${winner===p2.name ? '<div class="crown">👑</div>' : ''}
+        <div class="name">${p2.name}</div>
+        <div class="pts">${p2.score}</div>
+        <div class="sub">${p2.correct} correctas · ${p2.incorrect} incorrectas</div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center; margin-bottom:20px;">
+      ${winner ? `📊 Diferencia de puntos: <strong>${diff}</strong>` : "📊 Ambos jugadores empataron en puntaje"}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goMpSetup()">JUGAR OTRA VEZ</button>
+      <button class="btn btn-ghost" onclick="goSoloSetup()">CAMBIAR A MODO SOLO</button>
+      <button class="btn btn-ghost" onclick="showScreen('screen-home')">VOLVER AL INICIO</button>
+    </div>
+  `;
+  showScreen("screen-results");
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderSettings();
+</script>
+</body>
+</html>
